@@ -100,10 +100,13 @@ def check(data_dir: Path, files: Iterable[DataFile] = FILES) -> dict[str, str]:
     return {f.key: status_of(data_dir, f) for f in files}
 
 
-def _download(url: str, dest: Path, file: DataFile, timeout: float) -> None:
+def _download(
+    url: str, dest: Path, file: DataFile, timeout: float, log: Callable[[str], None]
+) -> None:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     h = hashlib.sha256()
     size = 0
+    shown = 0  # tenths of the file already reported, so a slow download shows it moves
     with urllib.request.urlopen(req, timeout=timeout) as resp, dest.open("wb") as out:
         while block := resp.read(CHUNK):
             size += len(block)
@@ -111,6 +114,10 @@ def _download(url: str, dest: Path, file: DataFile, timeout: float) -> None:
                 raise FetchError(f"more than the expected {file.size} bytes")
             h.update(block)
             out.write(block)
+            tenths = size * 10 // file.size
+            if tenths > shown and size < file.size:
+                shown = tenths
+                log(f"{file.key}: {tenths * 10}% of {file.size // 1_000_000} MB")
     if size != file.size:
         raise FetchError(f"got {size} bytes, expected {file.size}")
     if h.hexdigest() != file.sha256:
@@ -133,7 +140,7 @@ def fetch_one(
     for url in file.urls:
         log(f"{file.key}: downloading {url}")
         try:
-            _download(url, part, file, timeout)
+            _download(url, part, file, timeout, log)
         except (OSError, FetchError) as e:
             errors.append(f"{url}: {e}")
             log(f"{file.key}: failed, {e}")

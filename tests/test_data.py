@@ -87,3 +87,13 @@ def test_main_reports_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     monkeypatch.setattr(data, "FILES", (f,))
     monkeypatch.setattr(data, "fetch", lambda d: data.fetch_one(d, f, log=quiet))
     assert data.main([str(tmp_path / "d")]) == 1
+
+
+def test_a_download_reports_its_progress(tmp_path: Path, empty_dir: Path) -> None:
+    content = bytes(range(256)) * 20_000  # about 5 MB: several chunks
+    f = file_for(content, make_source(tmp_path, "big", content))
+    lines: list[str] = []
+    data.fetch_one(empty_dir, f, log=lines.append)
+    progress = [line for line in lines if "%" in line]
+    assert progress and progress[-1].startswith("sample: ") and "% of 5 MB" in progress[-1]
+    assert all("100%" not in line for line in progress)

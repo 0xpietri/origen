@@ -24,7 +24,7 @@
   tagged with the commit SHA.
 
 ## Tests
-20 tests: fetching (checksum, size, mirror fallback, damaged file replaced, nothing left
+21 tests: fetching (checksum, size, mirror fallback, damaged file replaced, progress, nothing left
 behind on failure), `/healthz` with and without data, the page and its motto, CSP, no
 inline blocks, the access log without the query, determinism, the CLI, and that DE440s
 opens with Skyfield and covers 1850 to 2149. Without the data, the three tests that need
