@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+# Downloaded by `origen fetch-data` (checked against pinned SHA-256s); never in git.
+data/ephemeris/
+data/stars/
+*.part

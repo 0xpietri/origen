@@ -1,0 +1,11 @@
+.git
+.github
+.venv
+data/ephemeris
+data/stars
+research
+tests
+docs
+**/__pycache__
+.*_cache
+.env
