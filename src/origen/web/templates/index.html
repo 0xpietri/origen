@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>origen</title>
+  <meta name="description" content="{{ motto }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='origen.css') }}">
+</head>
+<body>
+  <main>
+    <p class="motto">{{ motto }}</p>
+    <h1>origen</h1>
+    <p>The real sky over any place on Earth, computed with the same ephemeris that
+      sends probes to the planets. Soon here: the sky right now, with the Sun, the Moon,
+      the planets and the brightest stars where they really are.</p>
+    <p class="quiet">Nothing you send is stored. Positions from JPL DE440s; stars from
+      ESA Hipparcos and the IAU star names.</p>
+  </main>
+  <footer>origen {{ version }} · <a href="https://github.com/0xpietri/origen">source</a> · MIT</footer>
+</body>
+</html>
