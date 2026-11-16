@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://origen.pietri.dev/schemas/stars.v1.json",
+  "title": "origen /v1/stars",
+  "description": "Every Hipparcos star (ESA 1997) with V <= 5.0, at epoch J2000 in ICRS, with IAU proper names. Column-oriented: index i of every array is the same star. Sorted by HIP number.",
+  "type": "object",
+  "required": ["schema", "engine", "epoch", "frame", "max_vmag", "count", "stars"],
+  "properties": {
+    "schema": { "const": "origen.stars.v1" },
+    "engine": { "$ref": "sky.v1.json#/$defs/engine" },
+    "epoch": { "const": "J2000" },
+    "frame": { "const": "ICRS" },
+    "max_vmag": { "type": "number" },
+    "count": { "type": "integer", "minimum": 0 },
+    "stars": {
+      "type": "object",
+      "required": ["hip", "ra_deg", "dec_deg", "vmag", "bv", "name"],
+      "properties": {
+        "hip": { "type": "array", "items": { "type": "integer", "minimum": 1 }, "description": "Hipparcos catalogue number." },
+        "ra_deg": { "type": "array", "items": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 }, "description": "Right ascension, degrees, 4 decimals." },
+        "dec_deg": { "type": "array", "items": { "type": "number", "minimum": -90, "maximum": 90 }, "description": "Declination, degrees, 4 decimals." },
+        "vmag": { "type": "array", "items": { "type": "number" }, "description": "Johnson V magnitude, 2 decimals." },
+        "bv": { "type": "array", "items": { "type": ["number", "null"] }, "description": "B-V colour index, 3 decimals; null where Hipparcos has none." },
+        "name": { "type": "array", "items": { "type": ["string", "null"] }, "description": "IAU WGSN proper name, or null." }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

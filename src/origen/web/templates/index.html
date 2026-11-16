@@ -3,20 +3,71 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>origen</title>
+  <title>origen · the sky right now</title>
   <meta name="description" content="{{ motto }}">
   <link rel="stylesheet" href="{{ url_for('static', path='origen.css') }}">
+  <script src="{{ url_for('static', path='sky.js') }}" defer></script>
 </head>
 <body>
   <main>
     <p class="motto">{{ motto }}</p>
     <h1>origen</h1>
-    <p>The real sky over any place on Earth, computed with the same ephemeris that
-      sends probes to the planets. Soon here: the sky right now, with the Sun, the Moon,
-      the planets and the brightest stars where they really are.</p>
-    <p class="quiet">Nothing you send is stored. Positions from JPL DE440s; stars from
-      ESA Hipparcos and the IAU star names.</p>
+    <p class="lede">The real sky over any place on Earth, computed with the same ephemeris that
+      sends probes to the planets. This is it right now: the Sun, the Moon, the planets and
+      every star brighter than magnitude 5, where they really are.</p>
+
+    <section id="sky" class="sky"
+      data-lat="{{ place.lat }}" data-lon="{{ place.lon }}" data-elev="{{ place.elev_m }}"
+      data-tz="{{ tz }}">
+      <h2>Over {% if place.name %}{{ place.name }}{% else %}{{ place.lat }}°, {{ place.lon }}°{% endif %}</h2>
+      <p class="quiet" id="sky-when">Latitude {{ place.lat }}°, longitude {{ place.lon }}°,
+        {{ place.elev_m | round | int }} m. Times in {{ tz }}.</p>
+      <div class="chart-wrap">
+        <svg id="chart" class="chart" viewBox="-110 -110 220 220" role="img"
+          aria-label="Sky chart: the horizon is the circle, the zenith its centre, north up and east to the left, as when you lie on your back with your head to the north.">
+        </svg>
+      </div>
+      <p class="quiet small">The circle is the horizon and its centre the point overhead. North is up and
+        east to the left, as seen lying on your back with your head to the north. No refraction.</p>
+      <p id="sky-status" class="quiet">Loading the sky…</p>
+
+      <h3>Bodies</h3>
+      <div class="table-wrap">
+        <table id="bodies">
+          <thead><tr><th>Body</th><th>Altitude</th><th>Azimuth</th><th>Magnitude</th><th>Rises</th><th>Sets</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h3>The Sun's day</h3>
+      <div class="table-wrap">
+        <table id="twilights">
+          <thead><tr><th>Event</th><th>Time</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="moon-line" class="quiet"></p>
+    </section>
+
+    <section class="place">
+      <h3>Another place</h3>
+      <form method="get" action="/" class="place-form">
+        <label>Latitude <input name="lat" type="number" step="any" min="-90" max="90" required value="{{ place.lat }}"></label>
+        <label>Longitude <input name="lon" type="number" step="any" min="-180" max="180" required value="{{ place.lon }}"></label>
+        <label>Height (m) <input name="elev_m" type="number" step="any" min="-500" max="9000" value="{{ place.elev_m }}"></label>
+        <label>Time zone <input name="tz" type="text" maxlength="64" value="{{ tz }}"></label>
+        <button type="submit">Show</button>
+      </form>
+      <p class="quiet small"><a href="/?lat={{ unquillo.lat }}&amp;lon={{ unquillo.lon }}&amp;elev_m={{ unquillo.elev_m | int }}&amp;tz={{ unquillo.tz }}">Unquillo, in Córdoba time</a></p>
+    </section>
+
+    <p class="quiet">Nothing you send is stored. The API this page draws from:
+      <a href="/v1/sky?lat={{ place.lat }}&amp;lon={{ place.lon }}&amp;elev_m={{ place.elev_m }}&amp;hours=2">/v1/sky</a>,
+      <a href="/v1/stars">/v1/stars</a>,
+      <a href="/v1/seasons?year=2026">/v1/seasons</a>, with their
+      <a href="/schemas/sky.v1.json">schemas</a>.</p>
   </main>
-  <footer>origen {{ version }} · <a href="https://github.com/0xpietri/origen">source</a> · MIT</footer>
+  <footer>Positions: JPL DE440s · Stars: ESA Hipparcos · Star names: IAU WGSN<br>
+    origen {{ version }} · <a href="https://github.com/0xpietri/origen">source</a> · MIT</footer>
 </body>
 </html>
