@@ -15,7 +15,13 @@ It is also the one place in the [pietri.dev](https://pietri.dev) family where th
 computed; pietri.dev's little 3D world shows the real sky over Unquillo, Córdoba, by asking
 origen.
 
-Status: phase 1 (the base). The sky itself arrives in phase 2.
+Status: phase 2. The page shows the sky right now over any place, and the API answers:
+
+- `GET /v1/sky?lat=&lon=[&elev_m=&from=&hours=&step_min=]`: every body sampled over a
+  window, their rise, set and twilights, the Moon's phase and the rotation that places the stars.
+- `GET /v1/stars`: the 1,625 Hipparcos stars down to magnitude 5, at J2000, with IAU names.
+- `GET /v1/seasons?year=`: the instants of the equinoxes and solstices.
+- `GET /schemas/<name>.json`: the JSON Schema of every answer.
 
 - Specification: [`docs/spec/ORIGEN_SPEC_v0.1.md`](docs/spec/ORIGEN_SPEC_v0.1.md)
 - Phase reports: [`docs/reports/`](docs/reports/)

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://origen.pietri.dev/schemas/error.v1.json",
+  "title": "origen error (RFC 9457 problem details)",
+  "description": "Every error, served as application/problem+json. Out-of-range input is 422.",
+  "type": "object",
+  "required": ["type", "title", "status", "detail", "param"],
+  "properties": {
+    "type": { "type": "string", "description": "Always about:blank: the title is the HTTP status phrase." },
+    "title": { "type": "string" },
+    "status": { "type": "integer", "minimum": 400, "maximum": 599 },
+    "detail": { "type": "string", "description": "What went wrong, in plain English." },
+    "param": { "type": ["string", "null"], "description": "The offending query parameter, or null." }
+  },
+  "additionalProperties": true
+}

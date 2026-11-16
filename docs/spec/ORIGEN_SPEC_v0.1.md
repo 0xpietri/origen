@@ -398,13 +398,18 @@ be built against it and pietri.dev's test user can simulate it:
   0.05 (0.1 for the Moon). Positions and distances are recorded for the same
   targets origen uses (the barycentres of Mars to Pluto), magnitude and
   illumination for the planet itself.
+  Agreed exceptions (marcos, 2026-11-16, phase 2): azimuth within 2.5″ near a
+  pole (Skyfield's bundled timescale has no polar motion; Horizons applies it),
+  magnitude within 0.08 for Mars (surface features not modelled) and 0.12 for
+  Mercury beyond a 120° phase angle.
 - **Saturn's rings**: B against Meeus's worked example (*Astronomical
   Algorithms*, chapter 45) and published Astronomical Almanac values, within
   0.01°. (Horizons' sub-observer latitude is planetodetic, not the same
   angle.)
 - **Rise, set, transit, twilights, Moon phases and seasons** against
   recorded US Naval Observatory tables (its JSON API) for fixed dates: within
-  1 minute (the tables are rounded to the minute).
+  1 minute (the tables are rounded to the minute); 90 s for years after the
+  last measured ΔT (each almanac predicts its own), agreed 2026-11-16.
 - **Stars**: count, a few known stars (Sirius, Canopus, α Centauri, Acrux)
   with their names and positions, and the rotation matrix checked against
   Skyfield's own alt/az for those stars within 25″ (the aberration it leaves

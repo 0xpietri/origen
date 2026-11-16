@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://origen.pietri.dev/schemas/seasons.v1.json",
+  "title": "origen /v1/seasons",
+  "description": "The instants when the Sun's apparent geocentric ecliptic longitude of date reaches 0, 90, 180 and 270 degrees in a year. Named by the event, not by a hemisphere's season.",
+  "type": "object",
+  "required": ["schema", "engine", "year", "march_equinox", "june_solstice", "september_equinox", "december_solstice"],
+  "properties": {
+    "schema": { "const": "origen.seasons.v1" },
+    "engine": { "$ref": "sky.v1.json#/$defs/engine" },
+    "year": { "type": "integer", "minimum": 1850, "maximum": 2149 },
+    "march_equinox": { "$ref": "sky.v1.json#/$defs/instant", "description": "Longitude 0 degrees." },
+    "june_solstice": { "$ref": "sky.v1.json#/$defs/instant", "description": "Longitude 90 degrees." },
+    "september_equinox": { "$ref": "sky.v1.json#/$defs/instant", "description": "Longitude 180 degrees." },
+    "december_solstice": { "$ref": "sky.v1.json#/$defs/instant", "description": "Longitude 270 degrees." }
+  },
+  "additionalProperties": true
+}

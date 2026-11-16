@@ -22,6 +22,7 @@ RUN python /tmp/fetch_data.py /app/data && rm /tmp/fetch_data.py
 COPY pyproject.toml uv.lock README.md LICENSE ./
 RUN uv sync --frozen --no-dev --no-install-project
 
+COPY schemas ./schemas
 COPY src ./src
 RUN uv sync --frozen --no-dev \
     && origen check-data \
