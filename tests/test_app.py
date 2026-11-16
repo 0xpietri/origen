@@ -98,3 +98,21 @@ def test_the_chart_script_draws_from_origen_only() -> None:
     js = (WEB / "static" / "sky.js").read_text()
     assert "/v1/sky" in js and "/v1/stars" in js
     assert "http://" not in js.replace('"http://www.w3.org/2000/svg"', "") and "https://" not in js
+
+
+def test_every_css_url_points_to_a_local_file() -> None:
+    # Fonts and the aurora photos are served from here: the browser calls no third party.
+    static = WEB / "static"
+    for css in static.glob("*.css"):
+        for url in re.findall(r'url\("([^"]+)"\)', css.read_text()):
+            assert not url.startswith(("http:", "https:", "//")), (css.name, url)
+            assert (static / url).is_file(), (css.name, url)
+
+
+def test_the_page_has_the_aurora_behind_it(empty_dir: Path) -> None:
+    client = TestClient(create_app(empty_dir))
+    assert ".aurora{" in client.get("/static/origen.css").text
+    for photo in ("aurora.jpg", "aurora-tall.jpg"):
+        r = client.get(f"/static/{photo}")
+        assert r.status_code == 200 and r.headers["content-type"] == "image/jpeg"
+    assert 'class="aurora" aria-hidden="true"' in client.get("/").text

@@ -1,68 +1,123 @@
+/* origen's page: the aurora night with one frosted-glass sheet on it, in the
+   factory panel's look (origen keeps its own copy of the aurora by marcos's choice,
+   2026-11-16; the photos came from the panel). Fonts are self-hosted (spec §8): Bricolage Grotesque,
+   Figtree and JetBrains Mono, SIL OFL 1.1 (fonts/OFL.txt), latin subset. */
+@font-face { font-family: "Bricolage Grotesque"; src: url("fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("fonts/figtree.woff2") format("woff2"); font-weight: 300 900; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+
 :root {
-  --bg: #0b1020;
-  --fg: #e8e6df;
-  --quiet: #9aa3b8;
-  --accent: #e9c46a;
   color-scheme: dark;
+  --night: #060a12;
+  --glass: rgba(12, 19, 30, .66);
+  --glass-hi: rgba(22, 33, 48, .72);
+  --edge: rgba(160, 220, 255, .10);
+  --fg: #e8eef5;
+  --muted: #8c9bad;
+  --faint: #5d6b7d;
+  --aurora: #41f0b0;
+  --aurora-2: #2cc9d6;
+  --violet: #a77bff;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
 
-html, body { margin: 0; }
-
-html { background: var(--bg); }
+html, body { margin: 0; min-height: 100%; }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(ellipse at 50% 120%, #1c2a4a 0%, var(--bg) 60%) fixed;
+  background: var(--night);
   color: var(--fg);
-  font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font: 16px/1.55 var(--body);
+  padding: 20px 16px 0;
 }
+
+main, footer { position: relative; z-index: 1; }
+
+/* the aurora night, fixed behind everything */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:url("aurora.jpg") center 70%/cover no-repeat,
+    radial-gradient(60% 45% at 18% 78%,rgba(65,240,176,.32),transparent 70%),
+    radial-gradient(45% 40% at 78% 60%,rgba(167,123,255,.30),transparent 70%),
+    linear-gradient(180deg,#05080f 0%,#0a1322 55%,#08101a 100%)}
+.aurora::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,18,.10),rgba(6,10,18,.35))}
+@media (max-width:700px){
+  .aurora{background-image:url("aurora-tall.jpg"),linear-gradient(180deg,#05080f 0%,#0a1322 55%,#08101a 100%)}
+  .aurora::after{background:linear-gradient(180deg,rgba(6,10,18,.45),rgba(6,10,18,.6))}
+}
+
 
 main {
   flex: 1;
   width: 100%;
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 8vh 16px 2rem;
+  max-width: 46rem;
+  margin: 6vh auto 0;
+  padding: clamp(20px, 4vw, 40px);
+  background: var(--glass);
+  border: 1px solid var(--edge);
+  border-radius: 26px;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .7), 0 0 60px -20px rgba(65, 240, 176, .25);
 }
 
 .motto {
-  margin: 0 0 2rem;
-  color: var(--accent);
-  font-style: italic;
+  margin: 0 0 1.75rem;
+  color: var(--aurora);
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 1.15rem;
+  letter-spacing: -.01em;
+  text-wrap: balance;
 }
+
+h1, h2, h3 { margin: 0; text-wrap: balance; }
 
 h1 {
   margin: 0 0 1rem;
-  font-weight: 300;
-  font-size: 3rem;
-  letter-spacing: 0.04em;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  letter-spacing: -.03em;
+  line-height: 1;
 }
 
-.quiet, footer { color: var(--quiet); font-size: 0.9rem; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: -.015em; margin: 2.5rem 0 .25rem; }
 
-footer { padding: 1rem 16px 2rem; text-align: center; }
+h3 {
+  margin: 2rem 0 .6rem;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--aurora);
+}
 
-a { color: inherit; }
-
+.quiet, footer { color: var(--muted); font-size: .9rem; }
+.small { font-size: .8rem; }
 .lede { margin-top: 0; }
 
-h2 { font-weight: 400; font-size: 1.5rem; margin: 2.5rem 0 0.25rem; }
-h3 { font-weight: 400; font-size: 1.15rem; margin: 2rem 0 0.5rem; color: var(--accent); }
-.small { font-size: 0.8rem; }
+a { color: inherit; text-decoration-color: rgba(65, 240, 176, .5); text-underline-offset: 2px; }
+a:hover { color: var(--aurora); }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--aurora); outline-offset: 2px; }
 
-.chart-wrap { width: 100%; max-width: 34rem; margin: 1rem auto 0.5rem; }
+footer { padding: 1.5rem 16px 2rem; text-align: center; font-family: var(--mono); font-size: .72rem; color: var(--faint); }
+
+/* the sky chart: the horizon is a dark glass disc, so the aurora shows around it */
+.chart-wrap { width: 100%; max-width: 34rem; margin: 1rem auto .5rem; }
 .chart { display: block; width: 100%; height: auto; }
-.chart .horizon { fill: #070b18; stroke: #5d6782; stroke-width: 0.6; }
-.chart .grid { fill: none; stroke: #232c45; stroke-width: 0.3; stroke-dasharray: 1 1.5; }
-.chart .cardinal { fill: var(--quiet); font-size: 6px; text-anchor: middle; }
-.chart .star-label { fill: #7f89a3; font-size: 3.2px; }
+.chart .horizon { fill: rgba(4, 8, 15, .78); stroke: rgba(65, 240, 176, .45); stroke-width: .6; }
+.chart .grid { fill: none; stroke: rgba(160, 220, 255, .14); stroke-width: .3; stroke-dasharray: 1 1.5; }
+.chart .cardinal { fill: var(--aurora); font-family: var(--mono); font-size: 5.5px; text-anchor: middle; }
+.chart .star-label { fill: #7f8ea3; font-size: 3.2px; }
 .chart .body-label { fill: var(--fg); font-size: 3.8px; }
-.chart .body { stroke: #0b1020; stroke-width: 0.3; }
+.chart .body { stroke: var(--night); stroke-width: .3; }
 .chart .body.sun { fill: #ffd76a; }
 .chart .body.mercury { fill: #c9c3b6; }
 .chart .body.venus { fill: #fff3c4; }
@@ -72,22 +127,37 @@ h3 { font-weight: 400; font-size: 1.15rem; margin: 2rem 0 0.5rem; color: var(--a
 .chart .body.uranus { fill: #a9e3e6; }
 .chart .body.neptune { fill: #7b9cff; }
 .chart .body.pluto { fill: #b9a89a; }
-.chart .moon-dark { fill: #2a2f3d; stroke: #4a5167; stroke-width: 0.25; }
+.chart .moon-dark { fill: #2a2f3d; stroke: #4a5167; stroke-width: .25; }
 .chart .moon-lit { fill: #f4f1e6; }
 
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
-th, td { text-align: left; padding: 0.3rem 0.6rem 0.3rem 0; border-bottom: 1px solid #1d2640; white-space: nowrap; }
-th { color: var(--quiet); font-weight: 400; }
-tr.below td { color: var(--quiet); }
+/* tables as the panel's glass cards */
+.table-wrap { overflow-x: auto; background: var(--glass-hi); border: 1px solid var(--edge); border-radius: 18px; padding: 6px 16px; }
+table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+th, td { text-align: left; padding: .45rem .9rem .45rem 0; border-bottom: 1px solid var(--edge); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td { font-family: var(--mono); font-size: .8rem; font-variant-numeric: tabular-nums; }
+td:first-child { font-family: var(--body); font-size: .88rem; }
+th { color: var(--faint); font-family: var(--mono); font-weight: 400; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+tr.below td { color: var(--muted); }
 
-.place-form { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: flex-end; }
-.place-form label { display: flex; flex-direction: column; font-size: 0.85rem; color: var(--quiet); }
+/* another place */
+.place-form { display: flex; flex-wrap: wrap; gap: .7rem 1rem; align-items: flex-end; }
+.place-form label { display: flex; flex-direction: column; font-size: .8rem; color: var(--muted); }
 .place-form input {
-  width: 9.5rem; margin-top: 0.2rem; padding: 0.35rem 0.45rem;
-  background: #0f1630; color: var(--fg); border: 1px solid #2c3656; border-radius: 4px; font: inherit;
+  width: 9.5rem; margin-top: .25rem; padding: .5rem .65rem;
+  background: rgba(255, 255, 255, .04); color: var(--fg);
+  border: 1px solid var(--edge); border-radius: 12px; font: .9rem var(--mono);
 }
+.place-form input:focus { border-color: rgba(65, 240, 176, .5); }
 .place-form button {
-  padding: 0.4rem 1rem; background: var(--accent); color: #1a1400;
-  border: 0; border-radius: 4px; font: inherit; cursor: pointer;
+  padding: .55rem 1.2rem; font: 600 .95rem var(--body); color: #04140e;
+  background: linear-gradient(90deg, var(--aurora-2), var(--aurora));
+  border: 0; border-radius: 12px; cursor: pointer;
+  box-shadow: 0 8px 30px -10px rgba(65, 240, 176, .7);
+}
+.place-form button:hover { filter: brightness(1.08); }
+
+@media (max-width: 700px) {
+  body { padding: 12px 10px 0; }
+  main { margin-top: 2vh; border-radius: 20px; }
 }
