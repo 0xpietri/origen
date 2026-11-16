@@ -192,7 +192,7 @@ gzipped):
 }
 ```
 
-`ecl_*` fields are open point 14.1 (recommended in).
+`ecl_*` fields: decided, 14.1.
 
 ### 5.3 What each field means
 
@@ -264,7 +264,11 @@ work, in its repository (open point 14.4).
   can tint stars), `name` (or `null`).
 - It never changes within a catalogue version, so it is served with a strong
   `ETag` and `Cache-Control: public, max-age=86400`.
-- How the catalogue file reaches the service is open point 14.2.
+- No own catalogue code: Skyfield's Hipparcos loader
+  (`skyfield.data.hipparcos`) reads `hip_main.dat`, filtered to V ≤ 5 when
+  the service starts. `hip_main.dat` (~50 MB) and the IAU names list are
+  downloaded like the ephemeris (`origen fetch-data`, and at image build),
+  checked against pinned SHA-256s, and never enter git (decided, 14.2).
 
 ## 7. `GET /v1/seasons?year=`
 
@@ -413,14 +417,16 @@ be built against it and pietri.dev's test user can simulate it:
   the network. Tests that need DE440s skip with a clear message when it has
   not been fetched; CI always fetches it.
 
-## 14. Open points (stop: marcos's call)
+## 14. Open points
+
+Answered by marcos on 2026-11-16 unless noted.
 
 1. **pietri.dev's planet cards versus "version 1 is astronomy only".**
    pietri.dev's spec (stage 1, section 9 and step 6) promises planet cards
    with sign, degrees and retrograde, and computes them in the browser with
    `astronomy-engine`; that has to go, and origen's version 1 brings no
-   astrology. Options:
-   - **(a) Recommended**: version 1 includes each body's apparent geocentric
+   astrology. **Decided (a)**:
+   - **(a)**: version 1 includes each body's apparent geocentric
      ecliptic longitude, latitude and longitude rate (`ecl_*`, section 5.2).
      They are astronomy, cost nothing, and retrograde motion is simply a
      negative rate. Sign and house stay for the astrology phase, asked for
@@ -430,26 +436,27 @@ be built against it and pietri.dev's test user can simulate it:
    - (b) Leave `ecl_*` out; pietri.dev's cards show only astronomy until the
      astrology phase.
    - (c) Bring the astrology of the sky right now into phase 2.
-2. **Where the star catalogue comes from.** The ephemeris is downloaded at
-   build. For the stars:
-   - **(a) Recommended**: commit the derived file (`data/stars/hip5.csv`,
+2. **Where the star catalogue comes from.** **Decided (b)**, with Skyfield's
+   loader so nothing is reinvented (section 6). For the record:
+   - (a): commit a derived file (`data/stars/hip5.csv`,
      about 1,600 rows, ~100 KB) with the script that builds it from
      `hip_main.dat` and the IAU names, and the SHA-256 of both sources. Tests
      run offline, a catalogue change is a reviewable diff.
-   - (b) Download `hip_main.dat` (~50 MB) and the names at build, like the
-     ephemeris.
+   - **(b)**: download `hip_main.dat` (~50 MB) and the names, like the
+     ephemeris, and read them with Skyfield.
 3. **The ephemeris range.** DE440s covers 1849-12-26 to 2150-01-22 (~32 MB).
    That is plenty for the sky, but birth charts of people born before 1850
    would be refused, and serious research may want more. Recommended: DE440s
    now, and decide when charts arrive whether the image also carries DE440
-   (1550 to 2650, ~115 MB). Not blocking.
+   (1550 to 2650, ~115 MB) or DE441 (13,200 BC to AD 17,191, ~3 GB, for
+   research). Not blocking version 1.
 4. **pietri.dev's side.** Its spec needs an amendment (sections 8.1, 8.2, 9,
    10.5 and step 6: sky, seasons and the tick's sun elevation come from
    origen, `astronomy-engine` leaves). Recommended: a separate pietri.dev
    thread once this spec is approved, so each repository changes only its
    own files. Until origen is deployed, pietri.dev's tick points at a local
    origen (`ORIGEN_URL=http://127.0.0.1:8800`) or at recorded fixtures.
-5. **Server details (phase 3, proposed)**: host port `127.0.0.1:8800` (the
+5. **Server details (phase 3, decided)**: host port `127.0.0.1:8800` (the
    next free hundred), container memory limit 256 MB (DE440s is
    memory-mapped), behind Cloudflare and the Caddy + CrowdSec guard like the
    other public sites. pietri.dev's tick reaches it over the host.
