@@ -2,9 +2,9 @@
 
 > Astronomy and astrology were born sisters. They will be again.
 
-Status: draft for marcos's approval, 2026-11-16. Owner: marcos.
-Everything marked **proposed** waits for his yes; open points are in section 14.
-Where this spec says "decided", marcos said so in the request of 2026-11-16.
+Status: approved by marcos on 2026-11-16 (stack, licence and section 14
+answered the same day). Owner: marcos. Open point 14.3 waits for the
+birth-charts phase.
 
 ## 1. Purpose
 
@@ -65,7 +65,8 @@ Each one is asked for separately, with its own phase:
 
 ## 3. Stack
 
-**Proposed, for marcos to confirm** (it is the one he suggested; nothing added):
+Confirmed by marcos on 2026-11-16. Licence: **MIT** (the `LICENSE` file
+arrives in phase 1).
 
 - Python 3.12, `uv` with a committed lockfile, pytest, ruff (lint and format),
   mypy (strict on `src/`), like factory-panel.

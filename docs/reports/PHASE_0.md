@@ -11,10 +11,12 @@
 ## Tests
 None: no code in phase 0.
 
-## Waiting for marcos
-- Approval of the spec and confirmation of the stack (spec §3).
-- The open points in spec §14 (planet degrees in version 1, the star
-  catalogue file, the ephemeris range, pietri.dev's amendment, server details).
+## Decisions
+- marcos approved the spec and the stack on 2026-11-16, and chose the MIT licence.
+- Section 14: ecliptic longitude and rate in version 1; Hipparcos read with
+  Skyfield's loader and downloaded like the ephemeris; port 127.0.0.1:8800 and
+  256 MB; the ephemeris range waits for the birth charts; pietri.dev's
+  amendment goes to a separate thread.
 
 ## Next
 Phase 1, base: project, CI, Docker, ephemeris download.

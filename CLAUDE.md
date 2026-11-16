@@ -27,7 +27,7 @@
 - Skyfield's timescale uses its bundled data (`builtin=True`); nothing astronomical is downloaded at run time.
 
 ## Engineering
-- Stack (spec §3, as marcos confirms it there): Python 3.12, `uv` with a lockfile, pytest, ruff, mypy; Skyfield + JPL DE440s; FastAPI + Jinja, plain CSS/JS (no build step). Do not add a framework, engine or service without him.
+- Stack (spec §3, confirmed by marcos 2026-11-16; licence MIT): Python 3.12, `uv` with a lockfile, pytest, ruff, mypy; Skyfield + JPL DE440s; FastAPI + Jinja, plain CSS/JS (no build step). Do not add a framework, engine or service without him.
 - Astropy, astroquery, SciPy and Jupyter are the `research` dependency group only; `src/` never imports them or `research/`.
 - Swiss Ephemeris (`pyswisseph`, AGPL) is a development dependency for comparison tests only, never in the service or the image.
 - No database for now. If one is ever needed: PostgreSQL 17. Never Redis.
