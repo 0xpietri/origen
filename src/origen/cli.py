@@ -14,6 +14,8 @@ from pathlib import Path
 
 from origen import data
 
+_PACKAGE_DIR = Path(__file__).resolve().parent
+
 
 def _data_dir(args: argparse.Namespace) -> Path:
     return Path(args.data_dir).resolve() if args.data_dir else data.default_data_dir()
@@ -30,6 +32,10 @@ def _serve(args: argparse.Namespace) -> int:
         host=args.host,
         port=args.port,
         reload=args.reload,
+        # Watch only the package. uvicorn's polling reloader (no watchfiles here) stats every
+        # *.py under the reload dirs four times a second; from the repo root that includes
+        # .venv's thousands of files and keeps a core busy.
+        reload_dirs=[str(_PACKAGE_DIR)] if args.reload else None,
         # uvicorn's own access log prints the query string; origen logs without it (spec §9).
         access_log=False,
         proxy_headers=True,
