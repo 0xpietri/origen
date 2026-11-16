@@ -109,15 +109,10 @@ def test_every_css_url_points_to_a_local_file() -> None:
             assert (static / url).is_file(), (css.name, url)
 
 
-def test_the_aurora_is_shared_from_here(empty_dir: Path) -> None:
-    # Other sites (the factory panel) link /static/aurora.css instead of copying it,
-    # so its class and photos are a contract: never renamed or removed.
+def test_the_page_has_the_aurora_behind_it(empty_dir: Path) -> None:
     client = TestClient(create_app(empty_dir))
-    css = client.get("/static/aurora.css")
-    assert css.status_code == 200 and ".aurora{" in css.text
+    assert ".aurora{" in client.get("/static/origen.css").text
     for photo in ("aurora.jpg", "aurora-tall.jpg"):
         r = client.get(f"/static/{photo}")
         assert r.status_code == 200 and r.headers["content-type"] == "image/jpeg"
-    page = client.get("/").text
-    assert 'class="aurora" aria-hidden="true"' in page
-    assert page.index("aurora.css") < page.index("origen.css")
+    assert 'class="aurora" aria-hidden="true"' in client.get("/").text

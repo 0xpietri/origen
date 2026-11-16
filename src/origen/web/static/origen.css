@@ -1,5 +1,6 @@
-/* origen's page: the aurora night (aurora.css) with one frosted-glass sheet on it,
-   in the factory panel's look. Fonts are self-hosted (spec §8): Bricolage Grotesque,
+/* origen's page: the aurora night with one frosted-glass sheet on it, in the
+   factory panel's look (origen keeps its own copy of the aurora by marcos's choice,
+   2026-11-16; the photos came from the panel). Fonts are self-hosted (spec §8): Bricolage Grotesque,
    Figtree and JetBrains Mono, SIL OFL 1.1 (fonts/OFL.txt), latin subset. */
 @font-face { font-family: "Bricolage Grotesque"; src: url("fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 @font-face { font-family: "Figtree"; src: url("fonts/figtree.woff2") format("woff2"); font-weight: 300 900; font-display: swap; }
@@ -37,6 +38,19 @@ body {
 }
 
 main, footer { position: relative; z-index: 1; }
+
+/* the aurora night, fixed behind everything */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:url("aurora.jpg") center 70%/cover no-repeat,
+    radial-gradient(60% 45% at 18% 78%,rgba(65,240,176,.32),transparent 70%),
+    radial-gradient(45% 40% at 78% 60%,rgba(167,123,255,.30),transparent 70%),
+    linear-gradient(180deg,#05080f 0%,#0a1322 55%,#08101a 100%)}
+.aurora::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,18,.10),rgba(6,10,18,.35))}
+@media (max-width:700px){
+  .aurora{background-image:url("aurora-tall.jpg"),linear-gradient(180deg,#05080f 0%,#0a1322 55%,#08101a 100%)}
+  .aurora::after{background:linear-gradient(180deg,rgba(6,10,18,.45),rgba(6,10,18,.6))}
+}
+
 
 main {
   flex: 1;
