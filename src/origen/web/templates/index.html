@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>origen · the sky right now</title>
   <meta name="description" content="{{ motto }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='aurora.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='origen.css') }}">
   <script src="{{ url_for('static', path='sky.js') }}" defer></script>
 </head>
@@ -69,5 +70,6 @@
   </main>
   <footer>Positions: JPL DE440s · Stars: ESA Hipparcos · Star names: IAU WGSN<br>
     origen {{ version }} · <a href="https://github.com/0xpietri/origen">source</a> · MIT</footer>
+  <div class="aurora" aria-hidden="true"></div>
 </body>
 </html>
